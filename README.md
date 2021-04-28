@@ -1,1 +1,1 @@
-# Sistem-Programlama
+# Sistem-Programlama 1. Gün
