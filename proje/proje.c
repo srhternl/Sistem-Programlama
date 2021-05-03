@@ -15,20 +15,36 @@ void removeChar(char *str, char garbage)
     	*dst = '\0';
 }
 
-int main(void) 
+int main(int argc, char **argv) 
 {    
-	IS is;
-  	is = new_inputstruct(NULL); // NULL ise stdin(standard input)
+	IS is, input, output;
     	JRB encode, decode, tmp_e, tmp_d, tmp;
 	encode = make_jrb();
 	decode = make_jrb();
 	int sayac = 0;
+	is = new_inputstruct(".kilit");
+ 	input = new_inputstruct(argv[2]);
+	output = new_inputstruct(argv[3]);
+	FILE *file;
+	file = fopen(argv[3], "w");
+  	
+	if (argc != 4)
+	{
+		fprintf(stderr, "usage: printwords filename\n");
+		exit(1);
+	}
+	if (is == NULL) 
+	{
+    		perror((argv[1]));
+    		exit(1);
+  	}
 	
   	while(get_line(is) >= 0) // yada getline "!= -1" de olabilir.
   	{
    		//printf("Satır %d.\n", is->line);
 		char* key;
 		char* value;
+		//süslü parentez kontrolü.
     		if (strstr(is->text1, "}") == NULL && strstr(is->text1, "{") == NULL)
 		{
 			for(int i = 0; i < is->NF; i++)
@@ -38,14 +54,14 @@ int main(void)
 			key = is->fields[i];
 			removeChar(key, '\"');
 			removeChar(key, ':');
-			printf("key:%s\n", key);
+			//printf("key:%s\n", key);
        		}
        		else if(i == 1)
        		{
 			value = is->fields[i];
 			removeChar(value, '\"');
 			removeChar(value, ',');
-			printf("value:%s\n", value);
+			//printf("value:%s\n", value);
        		}
 		}
 		}		
@@ -57,30 +73,62 @@ int main(void)
 		}	
 		sayac ++;	
   	} 
-	
 	/*
-	jrb_traverse(tmp_e, encode) 
-	{
-    		printf("key: %s\n", tmp_e->key.v);
-		printf("encode value: %s\n", tmp_e->val.v);
-	}
-	jrb_traverse(tmp_d, decode) 
-	{
-    		printf("key: %s\n", tmp_d->key.v);
-		printf("decode value: %s\n", tmp_d->val.v);
-	}
-	*/
-
 	for (int i = 0; i < sayac - 2; i++)
 	{
 		encode = jrb_next(encode);
 		decode = jrb_next(decode);
+
+		
 		printf("encode key: %s\n", encode->key.v);
 		printf("encode value: %s\n", encode->val.v);
 		printf("decode key: %s\n", decode->key.v);
 		printf("decode value: %s\n", decode->val.v);
+		
 	}
-
+	*/
+	
+	while(get_line(input) >= 0) // yada getline "!= -1" de olabilir.
+  	{
+		char* key;
+		char* value;
+    		
+		for(int i = 0; i < input->NF; i++)
+		{
+			key = input->fields[i];
+			printf("keys: %s\n",key);
+			if (strcmp(argv[1], "-e") == 0)
+			{
+				JRB node = jrb_find_str(encode, key);
+				if (node != NULL)
+				{
+					fprintf(file, node->val.s);
+					fprintf(file, " ");
+				}
+				else
+				{
+					printf("key: %s\n",key);
+				}
+			}
+			
+			else if (strcmp(argv[1], "-d") == 0)
+			{
+				JRB node2 = jrb_find_str(decode, key);
+				if (node2 != NULL)
+				{
+					fprintf(file, node2->val.s);
+					fprintf(file, " ");
+				}
+				else
+				{
+					printf("key: %s\n",key);
+				}
+				
+			}
+		}
+		
+	}
+	
   	// Çıkmadan önce bellekte kullanılan yerlerin geri bırakılması
   	jettison_inputstruct(is);
 
