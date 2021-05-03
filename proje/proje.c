@@ -26,13 +26,13 @@ int main(void)
 	
   	while(get_line(is) >= 0) // yada getline "!= -1" de olabilir.
   	{
-   		//printf("Satır %d.\n", is->line);
 		char* key;
 		char* value;
     		if (strstr(is->text1, "}") == NULL && strstr(is->text1, "{") == NULL)
 		{
 			for(int i = 0; i < is->NF; i++)
 		{
+				
        		if(i == 0)
        		{
 			key = is->fields[i];
