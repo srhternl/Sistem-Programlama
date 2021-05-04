@@ -1,2 +1,1 @@
-Sistem Programlama
-Json formatında kilit dosyasının okunması
+# Sistem-Programlama 3. Gün
