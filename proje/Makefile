@@ -21,8 +21,11 @@ jval.o: jval.c jval.h
 	$(CC) -c $<
 
 clean:
-	rm *.o
+	rm *.o proje
 
-vclean:
-	rm -rf *.o
-	rm proje
+cleanall:
+	rm -rf *.o *txt proje .kilit giris encripted decripted
+
+run: proje clean
+	./proje -e giris encripted
+	./proje -d encripted decripted

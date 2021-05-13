@@ -14,34 +14,22 @@ void removeChar(char *str, char garbage)
     	}
     	*dst = '\0';
 }
-
-int main(int argc, char **argv) 
-{    
-	int kelimeSayac = 0;
-	IS is, input,inputSayac;
-    	JRB encode, decode, tmp_e, tmp_d, tmp;
-	encode = make_jrb();
-	decode = make_jrb();
-	int sayac = 0;
-	is = new_inputstruct(".kilit");
- 	input = new_inputstruct(argv[2]);
-	inputSayac = new_inputstruct(argv[2]);
-	FILE *file;
-	file = fopen(argv[3], "a");
-	
-  	
-	if (argc != 4)
+int border(IS inputSayac)
+{
+	int kelimeSayac;
+	while(get_line(inputSayac) >= 0)
 	{
-		fprintf(stderr, "usage: printwords filename\n");
-		exit(1);
+		for(int i = 0; i < inputSayac->NF; i++)
+		{
+			kelimeSayac++;
+		}
 	}
-	if (is == NULL) 
-	{
-    		perror((argv[1]));
-    		exit(1);
-  	}
-	
-  	while(get_line(is) >= 0) // yada getline "!= -1" de olabilir.
+	return kelimeSayac; 		
+}
+
+void trees(JRB encode,JRB decode,IS is)
+{
+	while(get_line(is) >= 0) // yada getline "!= -1" de olabilir.
   	{
    		//printf("Satır %d.\n", is->line);
 		char* key;
@@ -56,12 +44,22 @@ int main(int argc, char **argv)
 					key = is->fields[i];
 					removeChar(key, '\"');
 					removeChar(key, ':');
+					if(strlen(key) >= 100)
+					{
+						printf("100 karakter sınırını aştınız. \n");
+						exit(1);
+					}
        				}
        				else if(i == 1)
        				{
 					value = is->fields[i];
 					removeChar(value, '\"');
 					removeChar(value, ',');
+					if(strlen(value) >= 100)
+					{
+						printf("100 karakter sınırını aştınız. \n");
+						exit(1);
+					}
        				}
 			}
 		}		
@@ -71,19 +69,14 @@ int main(int argc, char **argv)
 			jrb_insert_str(encode, strdup(key), new_jval_s(strdup(value)));
 			jrb_insert_str(decode, strdup(value), new_jval_s(strdup(key)));
 		}	
-		sayac ++;	
+			
   	} 
-	
-	while(get_line(inputSayac) >= 0)
-	{
-		for(int i = 0; i < inputSayac->NF; i++)
-		{
-			kelimeSayac++;
-		}
-	}
+}
+void print(FILE* file,int kelimeSayac,char* arg,IS input,JRB encode,JRB decode)
+{
 	if(kelimeSayac <= 500)
 	{	
-		if(strcmp(argv[1], "-d") == 0 || strcmp(argv[1], "-e") == 0)
+		if(strcmp(arg, "-d") == 0 || strcmp(arg, "-e") == 0)
 		{
 			while(get_line(input) >= 0) // yada getline "!= -1" de olabilir.
   			{
@@ -94,7 +87,7 @@ int main(int argc, char **argv)
 				{
 					key = input->fields[i];
 				
-					if (strcmp(argv[1], "-e") == 0)
+					if (strcmp(arg, "-e") == 0)
 					{
 						JRB node = jrb_find_str(encode, key);
 						if (node != NULL)
@@ -109,7 +102,7 @@ int main(int argc, char **argv)
 						}
 					}
 			
-					else if (strcmp(argv[1], "-d") == 0)
+					else if (strcmp(arg, "-d") == 0)
 					{
 						JRB node2 = jrb_find_str(decode, key);
 						if (node2 != NULL)
@@ -138,6 +131,40 @@ int main(int argc, char **argv)
 	{
 		printf("Giriş dosyasında 500\'den fazla sayıda kelime var daha küçük bir örnek kullanınız!");
 	}
+}
+void controls(int argc,IS is)
+{
+	if (argc != 4)
+	{
+		fprintf(stderr, "usage: printwords filename\n");
+		exit(1);
+	}
+	if (is == NULL) 
+	{
+    		perror((".kilit"));
+    		exit(1);
+  	}
+}
+
+int main(int argc, char **argv) 
+{    
+	int kelimeSayac = 0;
+	IS is, isSayac, input, inputSayac;
+    	JRB encode, decode;
+	encode = make_jrb();
+	decode = make_jrb();
+	is = new_inputstruct(".kilit");
+	isSayac = new_inputstruct(".kilit");
+ 	input = new_inputstruct(argv[2]);
+	inputSayac = new_inputstruct(argv[2]);
+	FILE *file;
+	file = fopen(argv[3], "a");
+	
+  	
+	controls(argc,is);
+  	trees(encode,decode,is);	
+	kelimeSayac=border(inputSayac);
+	print(file,kelimeSayac,argv[1],input,encode,decode);
   	// Çıkmadan önce bellekte kullanılan yerlerin geri bırakılması
   	jettison_inputstruct(is);
 
