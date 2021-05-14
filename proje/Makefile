@@ -1,31 +1,31 @@
 
-all: proje
+all: kripto
 
-OBJ = proje.o fields.o jrb.o jval.o
+OBJ = kripto.o fields.o jrb.o jval.o
 
-proje: proje.o fields.o jrb.o jval.o
+kripto: kripto.o fields.o jrb.o jval.o
 	$(CC) $(OBJ) -o $@
-#	gcc proje.o fields.o jrb.o jval.o
+#	gcc kripto.o fields.o jrb.o jval.o
 
-proje.o: proje.c
+kripto.o: kripto.c
 	$(CC) -c $<
-#	gcc -c proje.c
+#	gcc -c kripto.c
 
-fields.o: fields.c fields.h
-	$(CC) -c $<
-
-jrb.o: jrb.c jrb.h
+fields.o: ./libfdr/fields.c ./libfdr/fields.h
 	$(CC) -c $<
 
-jval.o: jval.c jval.h
+jrb.o: ./libfdr/jrb.c ./libfdr/jrb.h
+	$(CC) -c $<
+
+jval.o: ./libfdr/jval.c ./libfdr/jval.h
 	$(CC) -c $<
 
 clean:
-	rm *.o proje
+	rm *.o
 
 cleanall:
-	rm -rf *.o *txt proje .kilit giris encripted decripted
+	rm -rf *.o *txt kripto .kilit ornek_metin encripted decripted
 
-run: proje clean
-	./proje -e giris encripted
-	./proje -d encripted decripted
+run: kripto clean
+	./kripto -e ornek_metin encripted
+	./kripto -d encripted decripted

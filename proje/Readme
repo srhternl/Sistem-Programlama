@@ -1,0 +1,20 @@
+GRUP ÜYELERİ: Alper Alabaş, Melike Göncü, Serhat Erenel, Sultan Çepni
+
+								DERLEME SÜRECİ
+
+- fields kütüphanesi içindeki get_line() metodunu kullanarak ".kilit" dosyasını satır satır okuduk.
+- removeChar() fonksiyonunu kullanarak Json formatındaki ".kilit" dosyasının içindeki gereksiz karakterleri sildik.
+- trees() fonksiyonunu oluşturarak encode, decode ağaçlarını oluşturduk.
+- ".kilit" dosyasındaki key ve value değerlerini analiz ederek daha önceden oluşturduğumuz encode ve decode ağaçlarına istenen şekilde atadık.
+- print() fonksiyonunu oluşturarak, ".kilit" dosyası baz alınarak, verilen giriş metnini girilen parametreye göre encript, decript işlemlerini uyguladık.
+- border() fonksiyonu ile giriş dosyasının kelime sayısını return ettik. return edilen bu veri global bir değişkene atandı. Değişkenin değeri bir if bloğu ile kontrol
+  edildi. 500'den küçük olması durumunda veriler print() fonksiyonu sayesinde dosyaya uygun şekilde yazdırıldı.
+- controls() fonksiyonunu oluşturarak parametre kontrolü, ".kilit" dosyasının olup olmadığını, giriş metni dosyasının olup olmadığının kontrollerini yaptık.
+- Proje dosyamıza uygun bir Makefile oluşturduk. Oluşturduğumuz Makefile dosyasını kullanarak "make" komutunu çalıştırdığımızda "kripto.c" uzantılı dosyamız
+  libfdr kütüphanesindeki dosyalarla birlikte derlenip "kripto" adında çalıştırılabilir bir dosya üretilir. Bu dosyayı manuel olarak çalıştırmak istersek
+  "./kripto -e ornek_metin encripted" ilk bu komutu kullanarak ornek_metin dosyasındaki metni şifreleyerek encripted adındaki dosyaya yazdıracak.
+  "./kripto -d encripted decripted" sonra bu komutu kullanarak encripted dosyası içindeki şifreli metni çözerek decripted adındaki dosyaya yazdıracak.
+- Bu aşamaları tek seferde yapmak istiyorsak Makefile içindeki "run" komutunu "make run" şeklinde kullanarak ilk önce dosyamız derlenecek, .o uzantılı dosyalar
+  silinecek, son olarak sırayla encript ve decript işlemleri uygulanacak.
+- Makefile içindeki "clean" komutu .o uzantılı dosyaları siler. "cleanall" komutu ise .o uzantılı dosyaları ve run komutunu çalıştırdığımızda oluşan dosyaları siler.
+- libfdr kütüphanesi dosyalarını, "libfdr" isimli dizinde tuttuk. Makefile içinde de bu şekilde belirttik.
