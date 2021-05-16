@@ -16,20 +16,6 @@ void removeChar(char *str, char garbage)
     	*dst = '\0';
 }
 
-// 500 kelime sınırını, sayaca atadığımız fonksiyon.
-int border(IS inputSayac)
-{
-	int kelimeSayac;
-	while(get_line(inputSayac) >= 0)
-	{
-		for(int i = 0; i < inputSayac->NF; i++)
-		{
-			kelimeSayac++;
-		}
-	}
-	return kelimeSayac; 		
-}
-
 // Oluşan encode decode ağaçlarına atama yapıyoruz.
 void trees(JRB encode,JRB decode,IS is)
 {
@@ -48,22 +34,12 @@ void trees(JRB encode,JRB decode,IS is)
 					key = is->fields[i];
 					removeChar(key, '\"');
 					removeChar(key, ':');
-					if(strlen(key) >= 100)
-					{
-						printf("100 karakter sınırını aştınız. \n");
-						exit(1);
-					}
        				}
        				else if(i == 1)
        				{
 					value = is->fields[i];
 					removeChar(value, '\"');
 					removeChar(value, ',');
-					if(strlen(value) >= 100)
-					{
-						printf("100 karakter sınırını aştınız. \n");
-						exit(1);
-					}
        				}
 			}
 		}		
@@ -78,12 +54,10 @@ void trees(JRB encode,JRB decode,IS is)
   	} 
 }
 
-// parametre ve kelime kontrolü, dosyaya yazdırma işlemleri.
-void print(FILE* file,int kelimeSayac,char* arg,IS input,JRB encode,JRB decode)
+// parametre ve dosyaya yazdırma işlemleri.
+void print(FILE* file, char* arg,IS input,JRB encode,JRB decode)
 {
-	//500 kelime kontrolü.
-	if(kelimeSayac <= 500)
-	{	
+		
 		if(strcmp(arg, "-d") == 0 || strcmp(arg, "-e") == 0)
 		{
 			while(get_line(input) >= 0) // yada getline "!= -1" de olabilir.
@@ -136,13 +110,7 @@ void print(FILE* file,int kelimeSayac,char* arg,IS input,JRB encode,JRB decode)
 		{	
 			printf("Yanlış parametre kullanımı!\n");
 		}
-	}
 	
-	//500 kelime kontrolünün hata mesajı.
-	else
-	{
-		printf("Giriş dosyasında 500\'den fazla sayıda kelime var daha küçük bir örnek kullanınız!");
-	}
 }
 
 
@@ -171,7 +139,6 @@ void controls(int argc,IS is, IS argv)
 
 int main(int argc, char **argv) 
 {    
-	int kelimeSayac = 0;
 	IS is, isSayac, input, inputSayac;
     	JRB encode, decode;
 	encode = make_jrb();
@@ -186,8 +153,8 @@ int main(int argc, char **argv)
   	
 	controls(argc,is, input);
   	trees(encode,decode,is);	
-	kelimeSayac=border(inputSayac);
-	print(file,kelimeSayac,argv[1],input,encode,decode);
+	print(file,argv[1],input,encode,decode);
+
   	// Çıkmadan önce bellekte kullanılan yerlerin geri bırakılması
   	jettison_inputstruct(is);
 
