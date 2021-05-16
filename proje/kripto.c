@@ -139,14 +139,12 @@ void controls(int argc,IS is, IS argv)
 
 int main(int argc, char **argv) 
 {    
-	IS is, isSayac, input, inputSayac;
+	IS is, input;
     	JRB encode, decode;
 	encode = make_jrb();
 	decode = make_jrb();
 	is = new_inputstruct(".kilit");
-	isSayac = new_inputstruct(".kilit");
  	input = new_inputstruct(argv[2]);
-	inputSayac = new_inputstruct(argv[2]);
 	FILE *file;
 	file = fopen(argv[3], "a");
 	
